@@ -1,2 +1,5 @@
-.vscode
-.ArduinoOutput
+ArduinoOutput/
+.vscode/
+/debug_custom.json
+/debug.cfg
+/debug.svd
