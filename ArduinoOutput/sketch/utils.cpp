@@ -19,36 +19,36 @@ String center_string(String str) {
   return str; // Return the centered string
 }
 
-String str_rjust(String str, uint8_t len) {
+String str_rjust(String str, uint8_t len, char c) {
     while(str.length() < len) {
-        str = String(' ') + str;
+        str = String(c) + str;
     }
     return str;
 }
 
-String str_ljust(String str, uint8_t len) {
+String str_ljust(String str, uint8_t len, char c) {
     while(str.length() < len) {
-        str = str + String(' ');
+        str = str + String(c);
     }
     return str;
 }
 
-String str_cjust(String str, uint8_t len) {
+String str_cjust(String str, uint8_t len, char c) {
     while(str.length() < len) {
-        str = String(' ') + str;
+        str = String(c) + str;
         if(str.length() < len) {
-            str = str + String(' ');
+            str = str + String(c);
         }
     }
     return str;
 }
 
-String str_align(String str, uint8_t len, uint8_t align) {
+String str_align(String str, uint8_t len, char c, align_t align) {
     switch(align) {
-        case 0: return str_ljust(str, len); break;
-        case 1: return str_cjust(str, len); break;
-        case 2: return str_rjust(str, len); break;
-        default: return str_ljust(str, len); break;
+        case LEFT: return str_ljust(str, len, c); break;
+        case CENTER: return str_cjust(str, len, c); break;
+        case RIGHT: return str_rjust(str, len, c); break;
+        default: Serial.println("Invalid alignment!"); return str_ljust(str, len, c); break;
     }
 }
 

@@ -1,4 +1,4 @@
-a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\libraries\Adafruit_SSD1306\Adafruit_SSD1306.cpp.o: \
+A:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\libraries\Adafruit_SSD1306\Adafruit_SSD1306.cpp.o: \
  C:\Users\lamqu\Documents\Arduino\libraries\Adafruit_SSD1306\Adafruit_SSD1306.cpp \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14\cores\esp32/pgmspace.h \
  C:\Users\lamqu\Documents\Arduino\libraries\Adafruit_SSD1306\Adafruit_SSD1306.h \

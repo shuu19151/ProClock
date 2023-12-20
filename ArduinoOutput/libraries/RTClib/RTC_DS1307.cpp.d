@@ -1,4 +1,4 @@
-a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\libraries\RTClib\RTC_DS1307.cpp.o: \
+A:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\libraries\RTClib\RTC_DS1307.cpp.o: \
  C:\Users\lamqu\Documents\Arduino\libraries\RTClib\src\RTC_DS1307.cpp \
  C:\Users\lamqu\Documents\Arduino\libraries\RTClib\src\RTClib.h \
  C:\Users\lamqu\Documents\Arduino\libraries\Adafruit_BusIO/Adafruit_I2CDevice.h \

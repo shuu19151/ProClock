@@ -1,4 +1,4 @@
-a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\libraries\Wire\Wire.cpp.o: \
+A:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\libraries\Wire\Wire.cpp.o: \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14\libraries\Wire\src\Wire.cpp \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14\cores\esp32/esp32-hal-i2c.h \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14/tools/sdk/esp32/include/esp_common/include/esp_err.h \

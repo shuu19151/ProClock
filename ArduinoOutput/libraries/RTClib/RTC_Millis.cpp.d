@@ -1,4 +1,4 @@
-a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\libraries\RTClib\RTC_Millis.cpp.o: \
+A:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\libraries\RTClib\RTC_Millis.cpp.o: \
  C:\Users\lamqu\Documents\Arduino\libraries\RTClib\src\RTC_Millis.cpp \
  C:\Users\lamqu\Documents\Arduino\libraries\RTClib\src\RTClib.h \
  C:\Users\lamqu\Documents\Arduino\libraries\Adafruit_BusIO/Adafruit_I2CDevice.h \

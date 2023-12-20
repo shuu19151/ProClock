@@ -1,6 +1,6 @@
-a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\sketch\display.cpp.o: \
- a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\sketch\display.cpp \
- a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\sketch\display.h \
+A:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\sketch\display.cpp.o: \
+ A:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\sketch\display.cpp \
+ A:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\sketch\display.h \
  C:\Users\lamqu\Documents\Arduino\libraries\Adafruit_SSD1306/Adafruit_SSD1306.h \
  C:\Users\lamqu\Documents\Arduino\libraries\Adafruit_GFX_Library/Adafruit_GFX.h \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14\cores\esp32/Arduino.h \
@@ -143,7 +143,7 @@ a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\sketch\display.cpp.o: \
  C:\Users\lamqu\Documents\Arduino\libraries\Adafruit_BusIO/Adafruit_SPIDevice.h \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14\libraries\SPI\src/SPI.h \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14\cores\esp32/esp32-hal-spi.h \
- a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\sketch\TCA9548.h \
- a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\sketch\fonts.h \
- a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\sketch\symbols.h \
- a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\sketch\utils.h
+ A:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\sketch\TCA9548.h \
+ A:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\sketch\fonts.h \
+ A:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\sketch\symbols.h \
+ A:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\sketch\utils.h

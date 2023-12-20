@@ -1,6 +1,6 @@
-a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\sketch\TCA9548.cpp.o: \
- a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\sketch\TCA9548.cpp \
- a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\sketch\TCA9548.h \
+A:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\sketch\TCA9548.cpp.o: \
+ A:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\sketch\TCA9548.cpp \
+ A:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\sketch\TCA9548.h \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14\cores\esp32/Arduino.h \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14\cores\esp32/esp_arduino_version.h \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14/tools/sdk/esp32/include/freertos/include/freertos/FreeRTOS.h \

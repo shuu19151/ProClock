@@ -1,3 +1,7 @@
+#ifndef DISPLAY_H
+#define DISPLAY_H
+#pragma once
+
 #include <Adafruit_SSD1306.h>
 #include <iostream>
 #include "TCA9548.h"
@@ -35,3 +39,5 @@ class MultiProDisplay {
     void clearAllDisplay(void);
     void show(void);
 };
+
+#endif // DISPLAY_H

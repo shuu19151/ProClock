@@ -1,4 +1,4 @@
-a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\core\wiring_pulse.c.o: \
+A:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\core\wiring_pulse.c.o: \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14\cores\esp32\wiring_pulse.c \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14\cores\esp32\wiring_private.h \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14\cores\esp32\Arduino.h \

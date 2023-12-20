@@ -1,4 +1,4 @@
-a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\core\esp32-hal-bt.c.o: \
+A:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\core\esp32-hal-bt.c.o: \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14\cores\esp32\esp32-hal-bt.c \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14\cores\esp32\esp32-hal-bt.h \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14\cores\esp32\esp32-hal.h \

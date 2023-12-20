@@ -5,6 +5,10 @@ App::App(MultiProDisplay* multiProDisplay, align_t align, uint32_t duration, uin
     this->pt_updateFrequency = updateFrequency == -1 ? this->pt_duration : updateFrequency * 1000;
 }
 
+// Update value frequency is the same as duration
+App::App(MultiProDisplay* multiProDisplay, align_t align, uint32_t duration)
+: pt_multiProDisplay(multiProDisplay), pt_align(align), pt_duration(duration * 1000), pt_updateFrequency(duration * 1000) {}
+
 void App::run(void) {
     uint32_t usedDuration = 0;
     while(usedDuration < pt_duration) {
@@ -21,8 +25,21 @@ void App::run(void) {
     }
 }
 
-void App::update(bool first, uint32_t remaining_duration) {
-    // Do nothing
+void App::update(bool first, uint32_t remaining_duration) {}
+
+wchar_t App::str2wchar(String unit) {
+    if(unit == "cardano")           { return CHAR_ADA;}
+    else if(unit == "baked-token")  { return CHAR_BAKED;}
+    else if(unit == "bitcoin")      { return CHAR_BTC;}
+    else if(unit == "dogecoin")     { return CHAR_DOGE;}
+    else if(unit == "ethereum")     { return CHAR_ETH;}
+    else if(unit == "litecoin")     { return CHAR_LTC;}
+    else if(unit == "polkadot")     { return CHAR_POLKADOT;}
+    else if(unit == "kusama")       { return CHAR_KSM;}
+    else if(unit == "usd")          { return '$';}
+    else if(unit == "eur")          { return CHAR_EUR;}
+    else if(unit == "gbp")          { return '£';}
+    else if(unit == "sats")         { return CHAR_WIDESATOSHI;}
 }
 
 ClockApp::ClockApp(MultiProDisplay* multiProDisplay, align_t align, bool showSecond, uint32_t duration, uint32_t updateFrequency)
@@ -90,4 +107,34 @@ void ClockApp::update(bool first, uint32_t remaining_duration) {
     this->m_lastHour = now.hour();
     this->m_lastMinute = now.minute();
     this->m_lastSecond = now.second();
+}
+
+CryptoApp::CryptoApp(MultiProDisplay* multiProDisplay, align_t align, 
+String crypto, String currency, uint8_t decimal, uint32_t duration, uint32_t updateFrequency)
+: App(multiProDisplay, align, duration, updateFrequency) {
+    this->m_crypto = crypto;
+    this->m_currency = currency;
+    this->m_decimal = decimal;
+}
+
+void CryptoApp::update(bool first, uint32_t remaining_duration) {
+    // init URL
+    const char* base_url = "https://api.coingecko.com/api/v3/coins/%s/market_chart?vs_currency=%s&days=0";
+    char url[128];
+    sprintf(url, base_url, this->m_crypto, this->m_currency);
+    Serial.printf("url: %s\n", url);
+    // get data from URL
+    String prices = this->m_request.parseJson(url, "prices", 0, 1);
+    Serial.printf("prices: %s\n", String(prices.toInt()));
+    this->pt_multiProDisplay->clearAllDisplay();
+    this->pt_multiProDisplay->render_string(String("  " + String(prices.toInt()) + "  "), true, true);
+    this->pt_multiProDisplay->getDisplay(0).render_character(str2wchar(this->m_currency), 0);
+    this->pt_multiProDisplay->getDisplay(4).render_character(str2wchar(this->m_crypto), 0);
+    this->pt_multiProDisplay->show();
+}
+
+void CryptoApp::setArgs(String crypto, String currency, uint8_t decimal) {
+    this->m_crypto = crypto;
+    this->m_currency = currency;
+    this->m_decimal = decimal;
 }

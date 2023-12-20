@@ -1,4 +1,4 @@
-a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\libraries\Adafruit_GFX_Library\Adafruit_SPITFT.cpp.o: \
+A:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\libraries\Adafruit_GFX_Library\Adafruit_SPITFT.cpp.o: \
  C:\Users\lamqu\Documents\Arduino\libraries\Adafruit_GFX_Library\Adafruit_SPITFT.cpp \
  C:\Users\lamqu\Documents\Arduino\libraries\Adafruit_GFX_Library\Adafruit_SPITFT.h \
  C:\Users\lamqu\Documents\Arduino\libraries\Adafruit_GFX_Library\Adafruit_GFX.h \

@@ -1,4 +1,4 @@
-a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\core\HardwareSerial.cpp.o: \
+A:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\core\HardwareSerial.cpp.o: \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14\cores\esp32\HardwareSerial.cpp \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14\variants\esp32/pins_arduino.h \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14\cores\esp32\io_pin_remap.h \

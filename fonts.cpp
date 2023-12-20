@@ -13,8 +13,8 @@ const uint8_t* get_symbol_for_character(wchar_t c, uint8_t *width) {
         case '7': *width = 48;                   return SEVEN;       break;
         case '8': *width = 48;                   return EIGHT;       break;
         case '9': *width = 48;                   return NINE;        break;
-        case 'A': *width = 48;                      return A;           break;
-        case 'B': *width = 48;                      return B;           break;
+        case 'A': *width = 48;                   return A;           break;
+        case 'B': *width = 48;                   return B;           break;
         case 'C': *width = 48;                   return C;           break;
         case 'D': *width = 48;                   return D;           break;
         case 'E': *width = 48;                   return E;           break;
@@ -39,7 +39,7 @@ const uint8_t* get_symbol_for_character(wchar_t c, uint8_t *width) {
         case 'X': *width = 48;                   return X;           break;
         case 'Y': *width = 48;                   return Y;           break;
         case 'Z': *width = 48;                   return Z;           break;
-        case 'a': *width = 48;                      return A;           break;
+        case 'a': *width = 48;                   return A;           break;
         case 'b': *width = 48;                   return B;           break;
         case 'c': *width = 48;                   return C;           break;
         case 'd': *width = 48;                   return D;           break;
@@ -68,12 +68,12 @@ const uint8_t* get_symbol_for_character(wchar_t c, uint8_t *width) {
         case '.': *width = 48;                   return DOT;         break;
         case '$': *width = 48;                   return DOLLAR;      break;
         case '£': *width = 48;                   return GBP;         break;
-        case '€': *width = 48;                   return EUR;         break;
         case ':': *width = 48;                   return COLON;       break;
         case ' ': *width = 48;                   return EMPTY;       break;
+        case CHAR_EUR: *width = 48;                   return EUR;         break;
 
         // // Crypto logos
-        case CHAR_ADA: *width = 128;                return ADA;        break;
+        case CHAR_ADA: *width = 128;             return ADA;        break;
         case CHAR_BAKED: *width = 128;           return BAKED;      break;
         case CHAR_BTC: *width = 128;             return BTC;        break;
         case CHAR_DOGE: *width = 128;            return DOGE;       break;
@@ -97,6 +97,6 @@ const uint8_t* get_symbol_for_character(wchar_t c, uint8_t *width) {
         case CHAR_MOSCOW: *width = 128;          return MOSCOW;          break;
         case CHAR_MONEY_BAG_SAT: *width = 128;   return MONEY_BAG_SAT;   break;
 
-        default: *width = 48;                       return EMPTY;           break;
+        default: *width = 48;                    return EMPTY;           break;
     }
 }

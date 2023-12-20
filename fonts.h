@@ -7,6 +7,7 @@ const wchar_t CHAR_BAKED = L'\ue001';
 const wchar_t CHAR_BTC = L'\ue002';
 const wchar_t CHAR_DOGE = L'\ue003';
 const wchar_t CHAR_ETH = L'\ue004';
+const wchar_t CHAR_EUR = L'\ue015';
 const wchar_t CHAR_LTC = L'\ue005';
 const wchar_t CHAR_POLKADOT = L'\ue006';
 const wchar_t CHAR_WIDECOLON = L'\ue007';

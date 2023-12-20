@@ -1,4 +1,4 @@
-a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\core\WMath.cpp.o: \
+A:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\core\WMath.cpp.o: \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14\cores\esp32\WMath.cpp \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14/tools/sdk/esp32/include/esp_system/include/esp_system.h \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14/tools/sdk/esp32/include/esp_common/include/esp_err.h \

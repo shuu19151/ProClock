@@ -47,7 +47,7 @@ String str_align(String str, uint8_t len, char c, align_t align) {
         case LEFT: return str_ljust(str, len, c); break;
         case CENTER: return str_cjust(str, len, c); break;
         case RIGHT: return str_rjust(str, len, c); break;
-        default: return str_ljust(str, len, c); break;
+        default: Serial.println("Invalid alignment!"); return str_ljust(str, len, c); break;
     }
 }
 

@@ -1,4 +1,8 @@
 #line 1 "A:\\Tri\\Laptrinh\\Arduino\\ProClock\\display.h"
+#ifndef DISPLAY_H
+#define DISPLAY_H
+#pragma once
+
 #include <Adafruit_SSD1306.h>
 #include <iostream>
 #include "TCA9548.h"
@@ -14,14 +18,14 @@ class ProSSD1306 {
     ProSSD1306(Adafruit_SSD1306* display);
     void render_character(wchar_t character, uint8_t x_offset);
     void render_symbol(const uint8_t* symbol, uint8_t x_offset);
-    void display();
+    void show();
     void clearBuffer(void);
     void clearDisplay(void);
 };
 
 class MultiProDisplay {
     private:
-    Adafruit_SSD1306 m_baseDisplay;
+    Adafruit_SSD1306 m_baseDisplays[5];
     TCA9548 m_multiplexer;
     ProSSD1306 m_displays[5];
     const uint8_t m_num_displays = 5;
@@ -33,7 +37,8 @@ class MultiProDisplay {
     void render_string(String string, bool center, bool emty_as_transparent);
     ProSSD1306& getDisplay(uint8_t index);
     void render_character(void);
-    void clearBuffer(void);
-    void clear(void);
+    void clearAllDisplay(void);
     void show(void);
 };
+
+#endif // DISPLAY_H

@@ -1,4 +1,4 @@
-a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\libraries\Adafruit_GFX_Library\Adafruit_GrayOLED.cpp.o: \
+A:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\libraries\Adafruit_GFX_Library\Adafruit_GrayOLED.cpp.o: \
  C:\Users\lamqu\Documents\Arduino\libraries\Adafruit_GFX_Library\Adafruit_GrayOLED.cpp \
  C:\Users\lamqu\Documents\Arduino\libraries\Adafruit_GFX_Library\Adafruit_GrayOLED.h \
  C:\Users\lamqu\Documents\Arduino\libraries\Adafruit_GFX_Library/Adafruit_GFX.h \

@@ -1,4 +1,4 @@
-a:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\libraries\Adafruit_GFX_Library\Adafruit_GFX.cpp.o: \
+A:\Tri\Laptrinh\Arduino\ProClock\ArduinoOutput\libraries\Adafruit_GFX_Library\Adafruit_GFX.cpp.o: \
  C:\Users\lamqu\Documents\Arduino\libraries\Adafruit_GFX_Library\Adafruit_GFX.cpp \
  C:\Users\lamqu\Documents\Arduino\libraries\Adafruit_GFX_Library\Adafruit_GFX.h \
  C:\Users\lamqu\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.14\cores\esp32/Arduino.h \
