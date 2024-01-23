@@ -1,20 +1,44 @@
+#ifndef _MAIN_H_
+#define _MAIN_H_
+
+#if CONFIG_FREERTOS_UNICORE
+#define ARDUINO_RUNNING_CORE 0
+#else
+#define ARDUINO_RUNNING_CORE 1
+#endif
+
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <WiFiClient.h>
 #include <WiFi.h>
-#include "conf.h"
-#include "apps.h"
+#include "flags.h"
 
-#define NUM_WIFI_CREDENTIALS 2
-const char* wifiCredentials[2][NUM_WIFI_CREDENTIALS] = {
-    {"AP25-2_4GHz", "Lamquangtri105"},
-    {"Croissant", "wifihuroi"}
-};
 
-#define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 64
+typedef struct {
+  std::string wifi_ssid;
+  std::string wifi_pass;
+} wifi_credential_t;
 
-MultiProDisplay multiProDisplay(0x70, 5, SCREEN_WIDTH, SCREEN_HEIGHT);
-ClockApp clockApp(&multiProDisplay, CENTER, true, 30, 0);
-CryptoApp cryptoApp(&multiProDisplay, CENTER, "bitcoin", "usd", 30);
+typedef struct {
+  std::string base_currency;
+  std::string compare_crypto;
+} crypto_settings_t;
+
+typedef enum {
+    APP_CLOCK = 0,
+    APP_CRYPTO,
+} app_selection_e;
+
+typedef enum {
+    USER_SET_CLOCK = 0,
+    USER_SET_CRYPTO,
+} user_settings_e;
+
+extern uint8_t commit_flags;
+extern uint8_t ble_flags;
+extern wifi_credential_t wifi_cre;
+extern crypto_settings_t crypto_set;
+extern user_settings_e user_settings;
+
+#endif

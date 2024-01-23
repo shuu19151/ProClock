@@ -1,5 +1,5 @@
 #include "apps.h"
-
+#include <string>
 App::App(MultiProDisplay* multiProDisplay, align_t align, uint32_t duration, uint32_t updateFrequency)
 : pt_multiProDisplay(multiProDisplay), pt_align(align), pt_duration(duration * 1000) {
     this->pt_updateFrequency = updateFrequency == -1 ? this->pt_duration : updateFrequency * 1000;
@@ -27,7 +27,7 @@ void App::run(void) {
 
 void App::update(bool first, uint32_t remaining_duration) {}
 
-wchar_t App::str2wchar(String unit) {
+wchar_t App::str2wchar(std::string unit) {
     if(unit == "cardano")           { return CHAR_ADA;}
     else if(unit == "baked-token")  { return CHAR_BAKED;}
     else if(unit == "bitcoin")      { return CHAR_BTC;}
@@ -53,7 +53,7 @@ ClockApp::ClockApp(MultiProDisplay* multiProDisplay, align_t align, bool showSec
 }
 
 void ClockApp::update(bool first, uint32_t remaining_duration) {
-    String timeString;
+    std::string timeString;
     uint32_t loopStart = millis();
     RTC_PCF8563 rtc;
     rtc.begin();
@@ -72,10 +72,10 @@ void ClockApp::update(bool first, uint32_t remaining_duration) {
         return;
     }
     if(this->m_showSecond) {
-        timeString = str_rjust(String(now.hour()), 2, '0') + "  " + str_rjust(String(now.minute()), 2, '0') + "  " + str_rjust(String(now.second()), 2, '0');
+        timeString = str_rjust(std::to_string(now.hour()), 2, '0') + "  " + str_rjust(std::to_string(now.minute()), 2, '0') + "  " + str_rjust(std::to_string(now.second()), 2, '0');
     }
     else {
-        timeString = str_rjust(String(now.hour()), 2, '0') + "  " + str_rjust(String(now.minute()), 2, '0');
+        timeString = str_rjust(std::to_string(now.hour()), 2, '0') + "  " + str_rjust(std::to_string(now.minute()), 2, '0');
     }
     Serial.printf("Bay gio la: %d:%d:%d\n", now.hour(), now.minute(), now.second());
     if(first) {
@@ -110,7 +110,7 @@ void ClockApp::update(bool first, uint32_t remaining_duration) {
 }
 
 CryptoApp::CryptoApp(MultiProDisplay* multiProDisplay, align_t align, 
-String crypto, String currency, uint8_t decimal, uint32_t duration, uint32_t updateFrequency)
+std::string crypto, std::string currency, uint8_t decimal, uint32_t duration, uint32_t updateFrequency)
 : App(multiProDisplay, align, duration, updateFrequency) {
     this->m_crypto = crypto;
     this->m_currency = currency;
@@ -127,13 +127,13 @@ void CryptoApp::update(bool first, uint32_t remaining_duration) {
     String prices = this->m_request.parseJson(url, "prices", 0, 1);
     Serial.printf("prices: %s\n", String(prices.toInt()));
     this->pt_multiProDisplay->clearAllDisplay();
-    this->pt_multiProDisplay->render_string(String("  " + String(prices.toInt()) + "  "), true, true);
+    this->pt_multiProDisplay->render_string(("  " + std::to_string(prices.toInt()) + "  "), true, true);
     this->pt_multiProDisplay->getDisplay(0).render_character(str2wchar(this->m_currency), 0);
     this->pt_multiProDisplay->getDisplay(4).render_character(str2wchar(this->m_crypto), 0);
     this->pt_multiProDisplay->show();
 }
 
-void CryptoApp::setArgs(String crypto, String currency, uint8_t decimal) {
+void CryptoApp::setArgs(std::string crypto, std::string currency, uint8_t decimal) {
     this->m_crypto = crypto;
     this->m_currency = currency;
     this->m_decimal = decimal;

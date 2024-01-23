@@ -70,7 +70,7 @@ const uint8_t* get_symbol_for_character(wchar_t c, uint8_t *width) {
         case '£': *width = 48;                   return GBP;         break;
         case ':': *width = 48;                   return COLON;       break;
         case ' ': *width = 48;                   return EMPTY;       break;
-        case CHAR_EUR: *width = 48;                   return EUR;         break;
+        case CHAR_EUR: *width = 48;              return EUR;         break;
 
         // // Crypto logos
         case CHAR_ADA: *width = 128;             return ADA;        break;

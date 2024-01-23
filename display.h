@@ -1,6 +1,5 @@
-#ifndef DISPLAY_H
-#define DISPLAY_H
-#pragma once
+#ifndef _DISPLAY_H_
+#define _DISPLAY_H_
 
 #include <Adafruit_SSD1306.h>
 #include <iostream>
@@ -33,7 +32,7 @@ class MultiProDisplay {
     public:
     MultiProDisplay(uint8_t addr, uint8_t num_displays, uint8_t display_width, uint8_t display_height);
     bool begin(void);
-    void render_string(String string, bool center, bool emty_as_transparent);
+    void render_string(std::string string, bool center, bool emty_as_transparent);
     ProSSD1306& getDisplay(uint8_t index);
     void render_character(void);
     void clearAllDisplay(void);

@@ -1,5 +1,5 @@
-#ifndef TCA9548_H
-#define TCA9548_H
+#ifndef _TCA9548_H_
+#define _TCA9548_H_
 
 #include <Arduino.h>
 #include <Wire.h>

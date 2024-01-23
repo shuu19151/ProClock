@@ -1,3 +1,6 @@
+#ifndef _CLIENT_REQUETST_H_
+#define _CLIENT_REQUETST_H_
+
 #include "HTTPClient.h"
 #include "ArduinoJson.h"
 #include "WiFi.h"
@@ -16,3 +19,5 @@ class Request {
     uint8_t m_retry = 5;
     uint8_t m_sleepBetweenRetry = 5;
 };
+
+#endif

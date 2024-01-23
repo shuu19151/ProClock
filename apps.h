@@ -1,12 +1,12 @@
-#ifndef APPS_H
-#define APPS_H
+#ifndef _APPS_H_
+#define _APPS_H_
 #pragma once
 
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
+#include "RTClib.h"
 #include "display.h"
-#include "datetime.h"
 #include "clientRequest.h"
 
 class App {
@@ -15,7 +15,7 @@ class App {
     align_t pt_align;
     uint32_t pt_duration;
     uint32_t pt_updateFrequency;
-    wchar_t str2wchar(String unit);
+    wchar_t str2wchar(std::string unit);
     public:
     App(MultiProDisplay* multiProDisplay, align_t align = RIGHT, uint32_t duration = 30);
     App(MultiProDisplay* multiProDisplay, align_t align = RIGHT, uint32_t duration = 30, uint32_t updateFrequency = -1);
@@ -26,7 +26,7 @@ class App {
 class ClockApp : public App {
     private:
     bool m_showSecond;
-    String m_align;
+    std::string m_align;
     uint32_t m_start;
     uint8_t m_lastHour;
     uint8_t m_lastMinute;
@@ -38,12 +38,12 @@ class ClockApp : public App {
 
 class CryptoApp : public App {
     public:
-    CryptoApp(MultiProDisplay* multiProDisplay, align_t align = CENTER, String crypto="bitcoin", String currency="usd", uint8_t decimal=4, uint32_t duration = 30, uint32_t updateFrequency = -1);
+    CryptoApp(MultiProDisplay* multiProDisplay, align_t align = CENTER, std::string crypto="bitcoin", std::string currency="usd", uint8_t decimal=4, uint32_t duration = 30, uint32_t updateFrequency = -1);
     void update(bool first, uint32_t remaining_duration) override;
-    void setArgs(String crypto, String currency, uint8_t decimal);
+    void setArgs(std::string crypto, std::string currency, uint8_t decimal);
     private:
-    String m_crypto;
-    String m_currency;
+    std::string m_crypto;
+    std::string m_currency;
     uint8_t m_decimal;
     Request m_request;
 };

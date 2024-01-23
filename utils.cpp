@@ -1,6 +1,6 @@
 #include "utils.h"
 
-String center_string(String str) {
+std::string center_string(std::string str) {
   uint8_t capacity = 10;
   uint8_t margin = (capacity - str.length()) / 2; // Calculate the margin on each side
   if (margin < 0) {
@@ -8,41 +8,41 @@ String center_string(String str) {
   }
   // Add spaces to the left and right of the string
   for (uint8_t i = 0; i < margin; i++) {
-    str = String(' ') + str + String(' ');
+    str = ' ' + str + ' ';
   }
   // If the string is still too short, add a space to the right
     if (str.length() < capacity) {
-        str = str + String(' ');
+        str = str + ' ';
     }
 
   return str; // Return the centered string
 }
 
-String str_rjust(String str, uint8_t len, char c) {
+std::string str_rjust(std::string str, uint8_t len, char c) {
     while(str.length() < len) {
-        str = String(c) + str;
+        str = c + str;
     }
     return str;
 }
 
-String str_ljust(String str, uint8_t len, char c) {
+std::string str_ljust(std::string str, uint8_t len, char c) {
     while(str.length() < len) {
-        str = str + String(c);
+        str = str + c;
     }
     return str;
 }
 
-String str_cjust(String str, uint8_t len, char c) {
+std::string str_cjust(std::string str, uint8_t len, char c) {
     while(str.length() < len) {
-        str = String(c) + str;
+        str = c + str;
         if(str.length() < len) {
-            str = str + String(c);
+            str = str + c;
         }
     }
     return str;
 }
 
-String str_align(String str, uint8_t len, char c, align_t align) {
+std::string str_align(std::string str, uint8_t len, char c, align_t align) {
     switch(align) {
         case LEFT: return str_ljust(str, len, c); break;
         case CENTER: return str_cjust(str, len, c); break;

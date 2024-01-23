@@ -58,7 +58,14 @@ bool MultiProDisplay::begin(void) {
     return err;
 }
 
-void MultiProDisplay::render_string(String string, bool center, bool empty_as_transparent=true) {
+/**
+ * @brief render string to display's buffer
+ * 
+ * @param [in] string The string to render
+ * @param [in] center Whether to center the string
+ * @param [in] empty_as_transparent Whether to skip spaces
+*/
+void MultiProDisplay::render_string(std::string string, bool center, bool empty_as_transparent=true) {
     if(center) {
         string = center_string(string);
     }
