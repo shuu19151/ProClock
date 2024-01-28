@@ -31,11 +31,17 @@ void initBLE(void) {
 }
 
 void ServerCallbacks::onConnect(BLEServer* pSv) {
-    Serial.println("Connected");
+  Serial.println("BLE connected");
+  SET_BIT(ble_flags, BLE_NOTIFY_FLAG);
+  SET_BIT(ble_flags, BLE_CLIENT_CONNECT_FLAG);
+  SET_BIT(ble_flags, BLE_DISPLAY_SYMBOL_FLAG);
 }
 
 void ServerCallbacks::onDisconnect(BLEServer* pSv) {
-    Serial.println("Disconnected");
+  Serial.println("BLE disconnected");
+  CLR_BIT(ble_flags, BLE_CLIENT_CONNECT_FLAG);
+  SET_BIT(ble_flags, BLE_DISPLAY_SYMBOL_FLAG);
+  BLEDevice::startAdvertising();
 }
 
 void RXCallback:: onWrite(BLECharacteristic* pCh) {
@@ -54,13 +60,11 @@ void RXCallback:: onWrite(BLECharacteristic* pCh) {
     case BLE_WIFI_SSID: {
       wifi_cre.wifi_ssid = data.substr(1);
       Serial.printf("WiFi SSID: %s\n", wifi_cre.wifi_ssid.c_str());
-      SET_BIT(ble_flags, BLE_NEW_WIFI_FLAG);
       break;
     }
     case BLE_CRYPTO_CURRENCY: {
       crypto_set.base_currency = data.substr(1);
       Serial.printf("Crypto currency: %s\n", data.substr(1).c_str());
-      SET_BIT(ble_flags, BLE_NEW_CRYPTO_FLAG);
       break;
     }
     case BLE_CRYPTO_CRYPTO: {
@@ -69,16 +73,23 @@ void RXCallback:: onWrite(BLECharacteristic* pCh) {
       SET_BIT(ble_flags, BLE_NEW_CRYPTO_FLAG);
       break;
     }
-    case BLE_USER_SET_APP: {
+    case BLE_APP_SELECT: {
       user_settings = (user_settings_e)std::stoi(data.substr(1)); // Convert string to int
       Serial.printf("User set app: %d\n", user_settings);
+      break;
+    }
+    case BLE_WIFI_ON: {
+      uint8_t wifi_state = std::stoi(data.substr(1)); // Convert string to int
+      // if(wifi_state == 0)       CLR_BIT(app_flags, APP_RUN_ONLINE_FLAG);
+      // else if(wifi_state == 1)  SET_BIT(app_flags, APP_RUN_ONLINE_FLAG);
       break;
     }
     default:
       break;
   }
 }
-
+static uint32_t last_notify = 0;
+static uint8_t notify_count = 0;
 void BLEProcess(void) {
   if(IS_BIT_SET(ble_flags, BLE_NEW_WIFI_FLAG)) { // Check if new WiFi credentials received
     Serial.println("New WiFi credentials received");
@@ -91,7 +102,21 @@ void BLEProcess(void) {
     Serial.println("New crypto settings received");
     Serial.printf("Base currency: %s\n", crypto_set.base_currency.c_str());
     Serial.printf("Compare crypto: %s\n", crypto_set.compare_crypto.c_str());
+    CLR_BIT(app_flags, APP_RUN_NORMAL_FLAG);
     CLR_BIT(ble_flags, BLE_NEW_CRYPTO_FLAG);
     SET_BIT(commit_flags, COMMIT_CRYPTO_FLAG);
+  }
+  if(IS_BIT_SET(ble_flags, BLE_NOTIFY_FLAG) && millis() - last_notify > 1000) {
+    notify_count++;
+    last_notify = millis();
+    std::string data;
+    data += '!';
+    data += IS_BIT_SET(app_flags, APP_RUN_ONLINE_FLAG) ? '1' : '0'; // WiFi state
+    pCharacteristicTX->setValue(data);
+    pCharacteristicTX->notify();
+    if(notify_count >= 3) {
+      notify_count = 0;
+      CLR_BIT(ble_flags, BLE_NOTIFY_FLAG);
+    }
   }
 }

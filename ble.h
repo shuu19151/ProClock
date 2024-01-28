@@ -13,21 +13,20 @@
 #define SERVICE_UUID "fc96f65e-318a-4001-84bd-77e9d12af44b"
 #define CHARACTERISTIC_UUID_TX "94b43599-5ea2-41e7-9d99-6ff9b904ae3a"
 #define CHARACTERISTIC_UUID_RX "04d3552e-b9b3-4be6-a8b4-aa43c4507c4d"
-#define BLE_KEYWORD 1
 
 typedef enum {
+    BLE_WIFI_ON = 33,
+    BLE_APP_SELECT = 34,
     BLE_WIFI_SSID = 35,
     BLE_WIFI_PASSWORD = 36,
     BLE_CRYPTO_CURRENCY = 37,
     BLE_CRYPTO_CRYPTO = 38,
-    BLE_USER_SET_APP = 39,
 } ble_command_t;
 
 static BLEServer* pServer = NULL;
 static BLEService* pService = NULL;
 static BLECharacteristic* pCharacteristicTX = NULL;
 static BLECharacteristic* pCharacteristicRX = NULL;
-
 
 void initBLE(void);
 

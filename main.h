@@ -35,10 +35,12 @@ typedef enum {
     USER_SET_CRYPTO,
 } user_settings_e;
 
+extern uint8_t app_flags;
 extern uint8_t commit_flags;
 extern uint8_t ble_flags;
 extern wifi_credential_t wifi_cre;
 extern crypto_settings_t crypto_set;
 extern user_settings_e user_settings;
-
+extern SemaphoreHandle_t display_mutex;
+extern TaskHandle_t TaskAppHandle;
 #endif

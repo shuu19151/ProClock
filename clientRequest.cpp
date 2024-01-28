@@ -18,6 +18,7 @@ String Request::get(String url) {
             }
             delay(this->m_sleepBetweenRetry * 1000);
         }
+        http.end();
     }
     return payload;
 }

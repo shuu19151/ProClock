@@ -1,7 +1,7 @@
 #include "myEEPROM.h"
 
 void initEEPROM(void) {
-  if (!EEPROM.begin(64)) {
+  if (!EEPROM.begin(256)) {
     Serial.println("Failed to initialise EEPROM");
     Serial.println("Restarting...");
     delay(1000);
@@ -13,9 +13,9 @@ void initEEPROM(void) {
   wifi_cre.wifi_pass = readStringFromEEPROM(ADDRESS_WIFI_PASSWORD);
   Serial.printf("WiFi password: %s\n", wifi_cre.wifi_pass.c_str());
   crypto_set.base_currency = readStringFromEEPROM(ADDRESS_CRYPTO_BASE_CURRENCY);
-  Serial.printf("Base currency: %d\n", crypto_set.base_currency.c_str());
+  Serial.printf("Base currency: %s\n", crypto_set.base_currency.c_str());
   crypto_set.compare_crypto = readStringFromEEPROM(ADDRESS_CRYPTO_COMPARE_CRYPTO);
-  Serial.printf("Compare crypto: %d\n", crypto_set.compare_crypto.c_str());
+  Serial.printf("Compare crypto: %s\n", crypto_set.compare_crypto.c_str());
 }
 
 void writeStringToEEPROM(int addrOffset, const std::string &strToWrite) {
@@ -58,17 +58,17 @@ std::string readBytesFromEEPROM(int addrOffset, int len) {
 }
 
 void EEPROMProcess(void) {
-  for (uint8_t i = 1; i < 8; i++) {
-    if (IS_BIT_SET(commit_flags, i)) {
+  for (uint8_t i = 1; i < SIZE_OF_8BIT_FLAG; i++) {
+    if(IS_BIT_SET(commit_flags, i)) {
       switch (i) {
         case COMMIT_WIFI_FLAG:
           writeStringToEEPROM(ADDRESS_WIFI_SSID, wifi_cre.wifi_ssid);
-          writeStringToEEPROM(ADDRESS_WIFI_SSID, wifi_cre.wifi_pass);
+          writeStringToEEPROM(ADDRESS_WIFI_PASSWORD, wifi_cre.wifi_pass);
           Serial.println("Wrote wifi credentials to EEPROM");
           break;
         case COMMIT_CRYPTO_FLAG:
           writeStringToEEPROM(ADDRESS_CRYPTO_BASE_CURRENCY, crypto_set.base_currency);
-          writeStringToEEPROM(ADDRESS_CRYPTO_BASE_CURRENCY, crypto_set.compare_crypto);
+          writeStringToEEPROM(ADDRESS_CRYPTO_COMPARE_CRYPTO, crypto_set.compare_crypto);
           Serial.println("Wrote crypto settings to EEPROM");
           break;
       }

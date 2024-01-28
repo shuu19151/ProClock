@@ -1,0 +1,32 @@
+20:15:28.666 -> ets Jul 29 2019 12:21:46
+20:15:28.666 -> 
+20:15:28.666 -> rst:0x1 (POWERON_RESET),boot:0x17 (SPI_FAST_FLASH_BOOT)
+20:15:28.666 -> configsip: 0, SPIWP:0xee
+20:15:28.666 -> clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+20:15:28.666 -> mode:DIO, clock div:1
+20:15:28.666 -> load:0x3fff0030,len:1344
+20:15:28.666 -> load:0x40078000,len:13964
+20:15:28.666 -> load:0x40080400,len:3600
+20:15:28.666 -> entry 0x400805f0
+20:15:29.334 -> 11
+20:15:29.334 -> WiFi SSID: AP25-2_4GHz
+20:15:29.334 -> 14
+20:15:29.334 -> WiFi password: Lamquangtri105
+20:15:29.334 -> 3
+20:15:29.334 -> Base currency: usd
+20:15:29.334 -> 7
+20:15:29.334 -> Compare crypto: bitcoin
+20:15:29.334 -> [WiFi-event] event: 0
+20:15:29.334 -> WiFi interface ready
+20:15:29.402 -> [WiFi-event] event: 2
+20:15:29.402 -> WiFi client started
+20:15:29.441 -> [WiFi-event] event: 5
+20:15:29.441 -> Disconnected from WiFi access point
+20:15:29.581 -> [WiFi-event] event: 4
+20:15:29.581 -> Connected to access point
+20:15:29.675 -> Display wifi ssid
+20:15:30.096 -> [WiFi-event] event: 7
+20:15:30.096 -> Obtained IP address: 192.168.1.7
+20:15:30.267 -> BLE Server Mac Address: 48:e7:29:32:c8:6a
+20:15:30.267 -> Waiting a client connection to notify...
+20:15:30.267 -> Bay gio la: 20:15:15

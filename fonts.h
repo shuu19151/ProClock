@@ -24,5 +24,7 @@ const wchar_t CHAR_DELTA = L'\ue011';
 const wchar_t CHAR_SIGMA = L'\ue012';
 const wchar_t CHAR_MOSCOW = L'\ue013';
 const wchar_t CHAR_MONEY_BAG_SAT = L'\ue014';
+const wchar_t CHAR_BLUETOOTH = L'\ue016';
+const wchar_t CHAR_NOBLUETOOTH = L'\ue017';
 
 const uint8_t* get_symbol_for_character(wchar_t c, uint8_t *width);

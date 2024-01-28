@@ -96,6 +96,8 @@ const uint8_t* get_symbol_for_character(wchar_t c, uint8_t *width) {
         case CHAR_SIGMA: *width = 128;           return SIGMA;           break;
         case CHAR_MOSCOW: *width = 128;          return MOSCOW;          break;
         case CHAR_MONEY_BAG_SAT: *width = 128;   return MONEY_BAG_SAT;   break;
+        case CHAR_BLUETOOTH: *width = 128;       return BLUETOOTH;       break;
+        case CHAR_NOBLUETOOTH: *width = 128;     return NOBLUETOOTH;     break;
 
         default: *width = 48;                    return EMPTY;           break;
     }
