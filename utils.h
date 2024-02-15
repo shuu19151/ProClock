@@ -7,6 +7,10 @@
 #define CLR_BIT(BF, N) BF &= ~((uint8_t)0b00000001 << N)
 #define IS_BIT_SET(BF, N) ((BF >> N) & 0b00000001)
 
+#define DEBUG(x) do { Serial.println(x);} while(0)
+#define DEBUGLN(x) do { Serial.println(x);} while(0)
+#define DEBUGF(x, ...) do { Serial.printf(x, __VA_ARGS__);} while(0)
+
 #define SIZE_OF_8BIT_FLAG (8)
 
 typedef enum align_t {

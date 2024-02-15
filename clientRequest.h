@@ -4,6 +4,7 @@
 #include "HTTPClient.h"
 #include "ArduinoJson.h"
 #include "WiFi.h"
+#include "main.h"
 
 class Request {
     public:

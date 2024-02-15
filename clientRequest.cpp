@@ -14,7 +14,7 @@ String Request::get(String url) {
                 return payload;
             }
             else {
-                Serial.printf("HTTP error: %s\n", http.errorToString(httpCode).c_str());
+                DEBUGF("HTTP error: %s\n", http.errorToString(httpCode).c_str());
             }
             delay(this->m_sleepBetweenRetry * 1000);
         }
@@ -58,6 +58,6 @@ String Request::parseJson(String url, String key, uint8_t index1, uint8_t index2
     DynamicJsonDocument doc(payload.length());
     deserializeJson(doc, payload);
     String value = doc[key][index1][index2];
-    Serial.printf("%s\n", value.c_str());
+    DEBUGF("%s\n", value.c_str());
     return value;
 }

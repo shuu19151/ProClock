@@ -1,0 +1,153 @@
+/* html {
+    font-family: Arial, Helvetica, sans-serif;
+    display: inline-block;
+    text-align: center;
+}
+h1 {
+    font-size: 1.8rem;
+    color: white;
+}
+.topnav {
+    overflow: hidden;
+    background-color: #0A1128;
+}
+body {
+    margin: 0;
+}
+.content {
+    padding: 50px;
+}
+.card-grid {
+    max-width: 800px;
+    margin: 0 auto;
+    margin-bottom: 30px;
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+.card {
+    background-color: white;
+    box-shadow: 2px 2px 12px 1px rgba(140,140,140,.5);
+    padding: 1rem;
+}
+button {
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.wifiSendButton{
+    background-color: #1b8a94;
+}
+
+.cryptoSendButton{
+    background-color: #5f6c6d;
+}
+
+.connectButton{
+    background-color: #24af37;
+}
+
+.disconnectButton{
+    background-color: #d13a30;
+}
+
+.gray-label {
+    color: #bebebe;
+    font-size: 1rem;
+}
+
+.reading {
+    font-size: 1.8rem;
+} */
+
+
+/* Reset some default styling */
+body, h1, p, label, input, button {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Top navigation bar styling */
+.topnav {
+    background-color: #4285f4;
+    color: #ffffff;
+    text-align: center;
+    padding: 15px;
+    position: relative;
+}
+
+/* BLE buttons and state styling */
+.ble-controls {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Content container styling */
+.content {
+    margin: 20px;
+}
+
+/* Card grid styling */
+.card-grid {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+/* Individual card styling */
+.card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 48%;
+}
+
+/* Button styling */
+.connectBleButton, .disconnectBleButton, .connectWifiButton, .disconnectWifiButton, .appSelectionButton, .wifiSendButton, .cryptoSendButton {
+    background-color: #4285f4;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Gray label styling */
+.gray-label {
+    color: #777777;
+}
+
+/* Input styling */
+input {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    box-sizing: border-box;
+}
+
+/* Adjustments for better mobile responsiveness */
+@media screen and (max-width: 600px) {
+    .card-grid {
+        flex-direction: column;
+    }
+
+    .card {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

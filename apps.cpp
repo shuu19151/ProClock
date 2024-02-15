@@ -20,12 +20,12 @@ void App::run(void) {
         this->update(usedDuration == 0, (this->pt_duration - usedDuration));
         uint32_t updateDuration = millis() - start;
         int32_t sleep = this->pt_updateFrequency - updateDuration;
-        // Serial.printf("sleep run: %d\n", sleep);
+        // DEBUGF("sleep run: %d\n", sleep);
         if(sleep > 0) {
             vTaskDelay(sleep / portTICK_PERIOD_MS);
         }
         usedDuration += millis() - start;
-        // Serial.printf("usedDuration run: %d\n", usedDuration);
+        // DEBUGF("usedDuration run: %d\n", usedDuration);
     }
 }
 
@@ -68,40 +68,37 @@ ClockApp::ClockApp(MultiProDisplay* multiProDisplay, align_t align, bool showSec
 void ClockApp::update(bool first, uint32_t remaining_duration) {
     std::string timeString;
     uint32_t loopStart = millis();
-    RTC_PCF8563 rtc;
-    rtc.begin();
-    rtc.start();
-    DateTime now = rtc.now();
+    Time now = rtc.getTime();
     if(first) {
         this->m_lastHour = -1;
         this->m_lastMinute = -1;
         this->m_lastSecond = -1;
     }
     // If show second is false, and the time is not changed, then sleep until the next minute
-    if((!this->m_showSecond) && (now.hour() == this->m_lastHour) && (now.minute() == this->m_lastMinute)) {
-        uint32_t sleep = 60 - now.second();
+    if((!this->m_showSecond) && (now.hour == this->m_lastHour) && (now.minute == this->m_lastMinute)) {
+        uint32_t sleep = 60 - now.second;
         sleep = sleep > remaining_duration ? remaining_duration : sleep;
         vTaskDelay(sleep * 1000 / portTICK_PERIOD_MS);
         return;
     }
     if(this->m_showSecond) {
-        timeString = str_rjust(std::to_string(now.hour()), 2, '0') + "  " + str_rjust(std::to_string(now.minute()), 2, '0') + "  " + str_rjust(std::to_string(now.second()), 2, '0');
+        timeString = str_rjust(std::to_string(now.hour), 2, '0') + "  " + str_rjust(std::to_string(now.minute), 2, '0') + "  " + str_rjust(std::to_string(now.second), 2, '0');
     }
     else {
-        timeString = str_rjust(std::to_string(now.hour()), 2, '0') + "  " + str_rjust(std::to_string(now.minute()), 2, '0');
+        timeString = str_rjust(std::to_string(now.hour), 2, '0') + "  " + str_rjust(std::to_string(now.minute), 2, '0');
     }
-    Serial.printf("Bay gio la: %d:%d:%d\n", now.hour(), now.minute(), now.second());
+    DEBUGF("Bay gio la: %d:%d:%d\n", now.hour, now.minute, now.second);
     uint32_t ulNotificationValue = 0;
     ulNotificationValue = ulTaskNotifyTake(pdTRUE, 0);
     if(first || (ulNotificationValue != 0)) {
 			if(xSemaphoreTake(display_mutex, 10) == pdTRUE) {
 				this->pt_multiProDisplay->clearAllDisplay();
 				if(this->m_showSecond) {
-						this->pt_multiProDisplay->getDisplay(1).render_character(CHAR_WIDECOLON, 0);
-						this->pt_multiProDisplay->getDisplay(3).render_character(CHAR_WIDECOLON, 0);
+                    this->pt_multiProDisplay->getDisplay(1).render_character(CHAR_WIDECOLON, 0);
+                    this->pt_multiProDisplay->getDisplay(3).render_character(CHAR_WIDECOLON, 0);
 				}
 				else {
-						this->pt_multiProDisplay->getDisplay(2).render_character(CHAR_WIDECOLON, 0);
+					this->pt_multiProDisplay->getDisplay(2).render_character(CHAR_WIDECOLON, 0);
 				}
 				this->pt_multiProDisplay->show();
 				xSemaphoreGive(display_mutex);
@@ -110,24 +107,24 @@ void ClockApp::update(bool first, uint32_t remaining_duration) {
 		if(xSemaphoreTake(display_mutex, 10) == pdTRUE) {
 			this->pt_multiProDisplay->render_string(timeString, true, true);
 			if(this->m_showSecond) {
-				if(this->m_lastHour != now.hour()       || (ulNotificationValue != 0))      {this->pt_multiProDisplay->getDisplay(0).show();}
-				if(this->m_lastMinute != now.minute()   || (ulNotificationValue != 0))      {this->pt_multiProDisplay->getDisplay(2).show();}
-				if(this->m_lastSecond != now.second()   || (ulNotificationValue != 0))      {this->pt_multiProDisplay->getDisplay(4).show();}
+				if(this->m_lastHour != now.hour       || (ulNotificationValue != 0))      {this->pt_multiProDisplay->getDisplay(0).show();}
+				if(this->m_lastMinute != now.minute   || (ulNotificationValue != 0))      {this->pt_multiProDisplay->getDisplay(2).show();}
+				if(this->m_lastSecond != now.second   || (ulNotificationValue != 0))      {this->pt_multiProDisplay->getDisplay(4).show();}
 			}
 			else {
-				if(this->m_lastHour != now.hour()       || (ulNotificationValue != 0))      {this->pt_multiProDisplay->getDisplay(1).show();}
-				if(this->m_lastMinute != now.minute()   || (ulNotificationValue != 0))      {this->pt_multiProDisplay->getDisplay(3).show();}
+				if(this->m_lastHour != now.hour       || (ulNotificationValue != 0))      {this->pt_multiProDisplay->getDisplay(1).show();}
+				if(this->m_lastMinute != now.minute   || (ulNotificationValue != 0))      {this->pt_multiProDisplay->getDisplay(3).show();}
 			}
 			xSemaphoreGive(display_mutex);
     }
     uint32_t sleep = 1000 - (millis() - loopStart);
-    // Serial.printf("sleep update: %d\n", sleep);
+    // DEBUGF("sleep update: %d\n", sleep);
     if(sleep > 0) {
         vTaskDelay(sleep / portTICK_PERIOD_MS);
     }
-    this->m_lastHour = now.hour();
-    this->m_lastMinute = now.minute();
-    this->m_lastSecond = now.second();
+    this->m_lastHour = now.hour;
+    this->m_lastMinute = now.minute;
+    this->m_lastSecond = now.second;
 }
 
 CryptoApp::CryptoApp(MultiProDisplay* multiProDisplay, align_t align, 
@@ -143,10 +140,10 @@ void CryptoApp::update(bool first, uint32_t remaining_duration) {
 	const char* base_url = "https://api.coingecko.com/api/v3/coins/%s/market_chart?vs_currency=%s&days=0";
 	char url[128];
 	sprintf(url, base_url, this->m_crypto.c_str(), this->m_currency.c_str());
-	Serial.printf("url: %s\n", url);
+	DEBUGF("url: %s\n", url);
 	// get data from URL
 	String prices = this->m_request.parseJson(url, "prices", 0, 1);
-	Serial.printf("prices: %s\n", String(prices.toInt()));
+	DEBUGF("prices: %s\n", String(prices.toInt()));
 	if(xSemaphoreTake(display_mutex, 10) == pdTRUE) {
 		this->pt_multiProDisplay->clearAllDisplay();
 		this->pt_multiProDisplay->render_string(("  " + std::to_string(prices.toInt()) + "  "), true, true);

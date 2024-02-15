@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>ProClock Web Server</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div id="container">
+        <div class="wrapper">
+            <img src="settings.png" alt="settings">
+            <h1>00:00:00 PM</h1>
+            <!-- <div class="content">
+                <div class="column">
+                    <select>
+                    <option value="Hour" selected disabled hidden>Hour</option>
+                    </select>
+                </div>
+                <div class="column">
+                    <select>
+                    <option value="Minute" selected disabled hidden>Minute</option>
+                    </select>
+                </div>
+                <div class="column">
+                    <select>
+                    <option value="AM/PM" selected disabled hidden>AM/PM</option>
+                    </select>
+                </div>
+            </div> -->
+            <button class="btn_SetClock">Set Date/Time</button>
+        </div>
+        <div class="config-form">
+          <div class="alarm-info">
+            <h3>WiFi Credentials</h3>
+            <div class="content">
+                <label for="wifissid">SSID:</label>
+                <input type="text" id="wifissid" name="wifissid">
+                <label for="wifipass">Password:</label>
+                <input type="password" id="wifipass" name="wifipass">
+            </div>
+            <button class="btn_SetWiFi">Set WiFi</button>
+          </div>
+        </div>
+        <div class="config-form">
+          <h3>Crypto Settings</h3>
+            <div class="content">
+              <div class="column-config">
+                <select>
+                    <option value="Currency" selected disabled hidden>Currency</option>
+                </select>
+              </div>
+              <div class="column-config">
+                <select>
+                    <option value="Crypto" selected disabled hidden>Crypto</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn_SetCrypto">Set Crypto</button>
+        </div>
+        <div class="config-form">
+          <h3>Select App To Run</h3>
+          <div class="content">
+            <div class="column-config">
+              <!-- <select>
+                <option value="Clock" selected disabled hidden>Application</option>
+              </select> -->
+              <input type="radio" id="clock" name="app" value="0">
+              <label for="clock">Clock</label><br>
+            </div>
+            <div class="column-config">
+              <!-- <select>
+                <option value="Clock" selected disabled hidden>Application</option>
+              </select> -->
+              <input type="radio" id="crypto" name="app" value="1">
+              <label for="crypto">Crypto</label><br>
+            </div>
+          </div>
+          <button class="btn_SetApp">Set App</button>
+        </div>
+        <div class="config-form">
+          <h1>00:00</h1>
+          <h2>00-00-0000</h2>
+          <div class="content">
+            <div class="column-config">
+              <select>
+                <option value="Hour" selected disabled hidden>Hour</option>
+              </select>
+            </div>
+            <div class="column-config">
+              <select>
+                <option value="Minute" selected disabled hidden>Minute</option>
+              </select>
+            </div>
+            <div class="column-config">
+              <select>
+                <option value="DayOfWeek" selected disabled hidden>Day of Week</option>
+              </select>
+            </div>
+          </div>
+          <div class="content">
+            <div class="column-config">
+              <select>
+                <option value="Date" selected disabled hidden>Date</option>
+              </select>
+            </div>
+            <div class="column-config">
+              <select>
+                <option value="Month" selected disabled hidden>Month</option>
+              </select>
+            </div>
+            <div class="column-config">
+              <select>
+                <option value="Year" selected disabled hidden>Year</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn_SetClock">Set Date/Time</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

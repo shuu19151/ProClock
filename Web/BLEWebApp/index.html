@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ESP32 Web BLE App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="favicon.ico">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div class="topnav">
+        <h1>ProClock Web BLE</h1>
+    </div>
+    <div class="content">
+        <div class="card-grid">
+            <div class="card">
+                <h2>App selection</h2>
+                <p>
+                    <button id="connectBleButton" class="connectBleButton"> Connect to BLE Device</button>
+                    <button id="disconnectBleButton" class="disconnectBleButton"> Disconnect BLE Device</button>
+                </p>
+                <p class="gray-label">BLE device state: <strong><span id="bleState" style="color:#d13a30;">Disconnected</span></strong></p>
+            </div>
+            <div class="card">
+                <p>
+                    <button id="connectWifiButton" class="connectWifiButton"> Connect Device to WiFi</button>
+                    <button id="disconnectWifiButton" class="disconnectWifiButton"> Disconnect Device to WiFi</button>
+                </p>
+                <p class="gray-label">WiFi status: <strong><span id="wifiState" style="color:#d13a30;">Disconnected</span></strong></p>
+            </div>
+            <div class="card">
+                <label for="AppSelection">Select app to run:</label>
+                <!-- <input type="text" id="basecurrency" name="basecurrency"> -->
+                <select id="AppSelection" name="AppSelection">
+                    <option value=0>Datetime clock</option>
+                    <option value=1>Crypto</option>
+                </select>
+                <button id="appSelectionButton" class="appSelectionButton">SELECT APP</button>
+            </div>
+        </div>
+        <div class="card-grid">
+            <div class="card">
+                <h2>WiFi credentials</h2>
+                <label for="wifissid">SSID:</label>
+                <input type="text" id="wifissid" name="wifissid">
+                <label for="wifipass">Password:</label>
+                <input type="text" id="wifipass" name="wifipass">
+                <button id="wifiSendButton" class="wifiSendButton">SET WIFI</button>
+            </div>
+
+            <div class="card">
+                <h2>Crypto settings</h2>
+                <label for="basecurrency">Base currency:</label>
+                <!-- <input type="text" id="basecurrency" name="basecurrency"> -->
+                <select id="basecurrency" name="basecurrency">
+                    <option value="usd">USD</option>
+                    <option value="eur">EUR</option>
+                    <option value="gbp">GBP</option>
+                    <option value="sats">SATOSHI</option>
+                    <option value="btc">BTC</option>
+                </select>
+                <label for="crypto">Crypto:</label>
+                <!-- <input type="text" id="crypto" name="crypto"> -->
+                <select id="crypto" name="crypto">
+                    <option value="cardano">Cardano</option>
+                    <option value="baked-token">Baked Token</option>
+                    <option value="bitcoin">Bitcoin</option>
+                    <option value="dogecoin">Dogecoin</option>
+                    <option value="ethereum">Ethereum</option>
+                    <option value="litecoin">Litecoin</option>
+                    <option value="polkadot">Polkadot</option>
+                    <option value="kusama">Kusama</option>
+                </select>
+                <button id="cryptoSendButton" class="cryptoSendButton">SET CRYPTO</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="script.js"></script>
+</html>

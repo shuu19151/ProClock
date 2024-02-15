@@ -2,20 +2,20 @@
 
 void initEEPROM(void) {
   if (!EEPROM.begin(256)) {
-    Serial.println("Failed to initialise EEPROM");
-    Serial.println("Restarting...");
+    DEBUG("Failed to initialise EEPROM");
+    DEBUG("Restarting...");
     delay(1000);
     ESP.restart();
   }
 
   wifi_cre.wifi_ssid = readStringFromEEPROM(ADDRESS_WIFI_SSID);
-  Serial.printf("WiFi SSID: %s\n", wifi_cre.wifi_ssid.c_str());
+  DEBUGF("WiFi SSID: %s\n", wifi_cre.wifi_ssid.c_str());
   wifi_cre.wifi_pass = readStringFromEEPROM(ADDRESS_WIFI_PASSWORD);
-  Serial.printf("WiFi password: %s\n", wifi_cre.wifi_pass.c_str());
-  crypto_set.base_currency = readStringFromEEPROM(ADDRESS_CRYPTO_BASE_CURRENCY);
-  Serial.printf("Base currency: %s\n", crypto_set.base_currency.c_str());
-  crypto_set.compare_crypto = readStringFromEEPROM(ADDRESS_CRYPTO_COMPARE_CRYPTO);
-  Serial.printf("Compare crypto: %s\n", crypto_set.compare_crypto.c_str());
+  DEBUGF("WiFi password: %s\n", wifi_cre.wifi_pass.c_str());
+  crypto_set.currency = readStringFromEEPROM(ADDRESS_CRYPTO_BASE_CURRENCY);
+  DEBUGF("Base currency: %s\n", crypto_set.currency.c_str());
+  crypto_set.crypto = readStringFromEEPROM(ADDRESS_CRYPTO_COMPARE_CRYPTO);
+  DEBUGF("Compare crypto: %s\n", crypto_set.crypto.c_str());
 }
 
 void writeStringToEEPROM(int addrOffset, const std::string &strToWrite) {
@@ -34,7 +34,7 @@ void writeIntToEEPROM(int addrOffset, uint8_t intToWrite) {
 
 std::string readStringFromEEPROM(int addrOffset) {
   int newStrLen = EEPROM.read(addrOffset);
-  Serial.println(newStrLen);  // debug
+  DEBUG(newStrLen);  // debug
 
   char data[newStrLen + 1];
 
@@ -64,12 +64,12 @@ void EEPROMProcess(void) {
         case COMMIT_WIFI_FLAG:
           writeStringToEEPROM(ADDRESS_WIFI_SSID, wifi_cre.wifi_ssid);
           writeStringToEEPROM(ADDRESS_WIFI_PASSWORD, wifi_cre.wifi_pass);
-          Serial.println("Wrote wifi credentials to EEPROM");
+          DEBUG("Wrote wifi credentials to EEPROM");
           break;
         case COMMIT_CRYPTO_FLAG:
-          writeStringToEEPROM(ADDRESS_CRYPTO_BASE_CURRENCY, crypto_set.base_currency);
-          writeStringToEEPROM(ADDRESS_CRYPTO_COMPARE_CRYPTO, crypto_set.compare_crypto);
-          Serial.println("Wrote crypto settings to EEPROM");
+          writeStringToEEPROM(ADDRESS_CRYPTO_BASE_CURRENCY, crypto_set.currency);
+          writeStringToEEPROM(ADDRESS_CRYPTO_COMPARE_CRYPTO, crypto_set.crypto);
+          DEBUG("Wrote crypto settings to EEPROM");
           break;
       }
       CLR_BIT(commit_flags, i);
@@ -89,15 +89,15 @@ void EEPROMProcess(void) {
 //       switch (i) {
 //         case 0:
 //           writeStringToEEPROM(EP_FIRMWARE_VERSION, FirmwareVersion);
-//           Serial.println("Wrote firmware version to EEPROM");
+//           DEBUG("Wrote firmware version to EEPROM");
 //           break;
 //         case 1:
 //           writeStringToEEPROM(EP_TCP_IP_ADDR, TCPServerIP);
-//           Serial.println("Wrote TCP server IP to EEPROM");
+//           DEBUG("Wrote TCP server IP to EEPROM");
 //           break;
 //         case 2:
 //           writeStringToEEPROM(EP_LORA_MODE, String(LoRaMode));
-//           Serial.println("Wrote LoRa transmission mode to EEPROM");
+//           DEBUG("Wrote LoRa transmission mode to EEPROM");
 //           break;
 //       }
 //       epArr[i] = false;

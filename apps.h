@@ -5,7 +5,6 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
-#include "RTClib.h"
 #include "display.h"
 #include "clientRequest.h"
 

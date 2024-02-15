@@ -226,5 +226,6 @@ void WiFiEvent(WiFiEvent_t event) {
             Serial.println("Obtained IP address");
             break;
         default: break;
-    }}
+    }
+}
 
