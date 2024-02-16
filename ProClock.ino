@@ -51,9 +51,10 @@ SemaphoreHandle_t display_mutex = NULL;
 
 PCF8563 rtc;
 MultiProDisplay multiProDisplay(0x70, 5, SCREEN_WIDTH, SCREEN_HEIGHT);
-ClockApp clockApp(&multiProDisplay, CENTER, true, 100, 0);
-CryptoApp cryptoApp(&multiProDisplay, CENTER, crypto_set.crypto, crypto_set.currency, 30);
-// AsyncEventSource events("/events");
+// ClockApp clockApp(&multiProDisplay, CENTER, true, 100, 0);
+// CryptoApp cryptoApp(&multiProDisplay, CENTER, crypto_set.crypto, crypto_set.currency, 30);
+ClockApp* clockApp = NULL;
+CryptoApp* cryptoApp = NULL;
 
 void setup() {
     Serial.begin(115200);
@@ -87,57 +88,70 @@ void initWiFi(void) {
   WiFi.mode(WIFI_AP_STA);
   #endif
   WiFi.onEvent(WiFiEvent);
-  if (xSemaphoreTake(display_mutex, portMAX_DELAY) == pdTRUE) {
-    if(wifi_cre.wifi_ssid != "" && wifi_cre.wifi_pass != "") { // Check if WiFi credentials found
-      WiFi.begin(wifi_cre.wifi_ssid.c_str(), wifi_cre.wifi_pass.c_str());
+  if(wifi_cre.wifi_ssid != "" && wifi_cre.wifi_pass != "") { // Check if WiFi credentials found
+    WiFi.begin(wifi_cre.wifi_ssid.c_str(), wifi_cre.wifi_pass.c_str());
+    if(xSemaphoreTake(display_mutex, portMAX_DELAY) == pdTRUE) {
       multiProDisplay.clearAllDisplay();
       multiProDisplay.render_string(("  " + wifi_cre.wifi_ssid), false, true);
       multiProDisplay.getDisplay(0).render_character(CHAR_WIFI, 0);
       multiProDisplay.show();
       DEBUG("Display wifi ssid");
-      uint8_t s_retry_num = 0;
-      while(!IS_BIT_SET(app_flags, APP_RUN_ONLINE_FLAG)) { // Check if connected to WiFi
-        if (s_retry_num < 10) { // try 10 times
-          s_retry_num++;
-          DEBUG("retry to connect to the AP");
-          if(WiFi.status() == WL_CONNECTED) { // display check mark if connected
+      xSemaphoreGive(display_mutex);
+    }
+    uint8_t s_retry_num = 0;
+    while(!IS_BIT_SET(app_flags, APP_RUN_ONLINE_FLAG)) { // Check if connected to WiFi
+      if (s_retry_num < 10) { // try 10 times
+        s_retry_num++;
+        DEBUG("retry to connect to the AP");
+        if(WiFi.status() == WL_CONNECTED) { // display check mark if connected
+          if(xSemaphoreTake(display_mutex, portMAX_DELAY) == pdTRUE) {
             multiProDisplay.clearAllDisplay();
             multiProDisplay.getDisplay(2).render_character(CHAR_CHECK, 0);
             multiProDisplay.show();
             DEBUG("Display check mark");
             vTaskDelay(2000 / portTICK_PERIOD_MS);
-            break;
+            xSemaphoreGive(display_mutex);
           }
-          vTaskDelay(1000 / portTICK_PERIOD_MS);
+          break;
         }
-        else { // display cross mark if not connected after 10 times
-          DEBUGF("Failed to connect to %s\n", wifi_cre.wifi_ssid.c_str());
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+      }
+      else { // display cross mark if not connected after 10 times
+        DEBUGF("Failed to connect to %s\n", wifi_cre.wifi_ssid.c_str());
+        if(xSemaphoreTake(display_mutex, portMAX_DELAY) == pdTRUE) {
           multiProDisplay.clearAllDisplay();
           multiProDisplay.getDisplay(2).render_character(CHAR_CROSS, 0);
           multiProDisplay.show();
-          DEBUG("Display cross mark");
           vTaskDelay(2000 / portTICK_PERIOD_MS);
-          break;
+          DEBUG("Display cross mark");
+          xSemaphoreGive(display_mutex);
         }
-      }
-      if(WiFi.status() == WL_CONNECTED) { // display check mark if connected
-        multiProDisplay.clearAllDisplay();
-        multiProDisplay.getDisplay(2).render_character(CHAR_CHECK, 0);
-        multiProDisplay.show();
-        DEBUG("Display check mark");
-        vTaskDelay(2000 / portTICK_PERIOD_MS);
+        break;
       }
     }
-    else { // display no wifi if no WiFi credentials found
-      DEBUG("No WiFi credentials found");
+    if(xSemaphoreTake(display_mutex, portMAX_DELAY) == pdTRUE) {
+      multiProDisplay.clearAllDisplay();
+      multiProDisplay.getDisplay(2).render_character(CHAR_CHECK, 0);
+      multiProDisplay.show();
+      DEBUG("Display check mark");
+      vTaskDelay(2000 / portTICK_PERIOD_MS);
+      xSemaphoreGive(display_mutex);
+    }
+  }
+  else { // display no wifi if no WiFi credentials found
+    DEBUG("No WiFi credentials found");
+    if(xSemaphoreTake(display_mutex, portMAX_DELAY) == pdTRUE) {
       multiProDisplay.clearAllDisplay();
       multiProDisplay.render_string("NO WIFI", true, false);
       multiProDisplay.show();
       DEBUG("Display no wifi");
       vTaskDelay(2000 / portTICK_PERIOD_MS);
+      xSemaphoreGive(display_mutex);
     }
   }
-  xSemaphoreGive(display_mutex);
+  if(TaskAppHandle != NULL) {
+    xTaskNotifyGive(TaskAppHandle);
+  }
 }
 
 void TaskProcess(void *pvParameters) {
@@ -188,7 +202,7 @@ void set_app_flags(void) {
         vTaskDelete(TaskAppHandle);
       }
       CLR_BIT(webserver_flags, WS_NEW_WIFI_FLAG);
-      WiFi.disconnect(true, true);
+      WiFi.disconnect(true);
       initWiFi();
     }
     else if(user_settings == USER_SET_CLOCK && app_selection != APP_CLOCK) {
@@ -214,15 +228,24 @@ void set_app_flags(void) {
 }
 
 void TaskApp(void *pvParameters) {
+  if(clockApp != NULL) {
+    delete clockApp;
+  }
+  if(cryptoApp != NULL) {
+    delete cryptoApp;
+  }
   for(;;) {
     switch (app_selection) {
     case APP_CLOCK:
-      clockApp.run();
+      clockApp = new ClockApp(&multiProDisplay, CENTER, true, 100, 0);
+      clockApp->run();
+      delete clockApp;
       break;
     case APP_CRYPTO:
-      vTaskDelay(2000 / portTICK_PERIOD_MS);
-      cryptoApp.setArgs(crypto_set.crypto, crypto_set.currency, 4);
-      cryptoApp.run();
+      vTaskDelay(1000 / portTICK_PERIOD_MS);
+      cryptoApp = new CryptoApp(&multiProDisplay, CENTER, crypto_set.crypto, crypto_set.currency, 30);
+      cryptoApp->run();
+      delete cryptoApp;
       break;
     default:
       break;

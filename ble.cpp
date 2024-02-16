@@ -66,12 +66,12 @@ void RXCallback:: onWrite(BLECharacteristic* pCh) {
       break;
     }
     case BLE_CRYPTO_CURRENCY: {
-      crypto_set.base_currency = data.substr(1);
+      crypto_set.currency = data.substr(1);
       DEBUGF("Crypto currency: %s\n", data.substr(1).c_str());
       break;
     }
     case BLE_CRYPTO_CRYPTO: {
-      crypto_set.compare_crypto = data.substr(1);
+      crypto_set.crypto = data.substr(1);
       DEBUGF("Crypto: %s\n", data.substr(1).c_str());
       SET_BIT(ble_flags, BLE_NEW_CRYPTO_FLAG);
       break;
@@ -102,8 +102,8 @@ void BLEProcess(void) {
   }
   if(IS_BIT_SET(ble_flags, BLE_NEW_CRYPTO_FLAG)) { // Check if new crypto settings received
     DEBUG("New crypto settings received");
-    DEBUGF("Base currency: %s\n", crypto_set.base_currency.c_str());
-    DEBUGF("Compare crypto: %s\n", crypto_set.compare_crypto.c_str());
+    DEBUGF("Base currency: %s\n", crypto_set.currency.c_str());
+    DEBUGF("Compare crypto: %s\n", crypto_set.crypto.c_str());
     CLR_BIT(app_flags, APP_RUN_NORMAL_FLAG);
     CLR_BIT(ble_flags, BLE_NEW_CRYPTO_FLAG);
     SET_BIT(commit_flags, COMMIT_CRYPTO_FLAG);

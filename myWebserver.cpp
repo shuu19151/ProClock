@@ -3,6 +3,7 @@
 
 static const char* PARAM_HOUR = "hour";
 static const char* PARAM_MINUTE = "min";
+static const char* PARAM_SECOND = "sec";
 static const char* PARAM_DOW = "dayofweek";
 static const char* PARAM_DATE = "date";
 static const char* PARAM_MONTH = "month";
@@ -26,13 +27,14 @@ void notFound(AsyncWebServerRequest *request) {
 }
 
 void firstLoadHandler(AsyncWebServerRequest *request) {
-    JSONFirstLoad["hour"] = String(dvDateTime.dateTime.hour);
-    JSONFirstLoad["min"] = String(dvDateTime.dateTime.minute);
-    JSONFirstLoad["sec"] = String(dvDateTime.dateTime.second);
-    JSONFirstLoad["dow"] = String(dvDateTime.dateTime.weekday);
-    JSONFirstLoad["date"] = String(dvDateTime.dateTime.day);
-    JSONFirstLoad["mon"] = String(dvDateTime.dateTime.month);
-    JSONFirstLoad["year"] = String(dvDateTime.dateTime.year);
+    dvDateTime.dateTime = rtc.getTime();
+    // JSONFirstLoad["hour"] = String(dvDateTime.dateTime.hour);
+    // JSONFirstLoad["min"] = String(dvDateTime.dateTime.minute);
+    // JSONFirstLoad["sec"] = String(dvDateTime.dateTime.second);
+    // JSONFirstLoad["dow"] = String(dvDateTime.dateTime.weekday);
+    // JSONFirstLoad["date"] = String(dvDateTime.dateTime.day);
+    // JSONFirstLoad["mon"] = String(dvDateTime.dateTime.month);
+    // JSONFirstLoad["year"] = String(dvDateTime.dateTime.year);
 
     JSONFirstLoad["ssid"] = String(wifi_cre.wifi_ssid.c_str());
     JSONFirstLoad["pass"] = String(wifi_cre.wifi_pass.c_str());
@@ -41,13 +43,10 @@ void firstLoadHandler(AsyncWebServerRequest *request) {
     
     String JSONStr = JSON.stringify(JSONFirstLoad);
     request->send(200, "application/json", JSONStr);
-    // JSONStr = String();
     DEBUG("First load");
-    // REFRESH_COUNT_TIME_SLEEP;
 }
 
 void updateHandler(AsyncWebServerRequest *request) {
-    // REFRESH_COUNT_TIME_SLEEP;
     String inputMessage;
     
     if(request->hasParam(PARAM_HOUR)) {
@@ -59,6 +58,12 @@ void updateHandler(AsyncWebServerRequest *request) {
     if(request->hasParam(PARAM_MINUTE)) {
       inputMessage = request->getParam(PARAM_MINUTE)->value();
       dvDateTime.setDateTime.minute = inputMessage.toInt();
+      DEBUGF("Set min: %s\n", inputMessage);
+    }
+    /*---*/
+    if(request->hasParam(PARAM_SECOND)) {
+      inputMessage = request->getParam(PARAM_SECOND)->value();
+      dvDateTime.setDateTime.second = inputMessage.toInt();
       DEBUGF("Set min: %s\n", inputMessage);
     }
     /*---*/
@@ -163,7 +168,7 @@ void setupAccessPoint(void) {
   
   server.on("/ReadingsFirstConfig", HTTP_GET, firstLoadHandler);
   
-  server.on("/update", HTTP_PUT, updateHandler);
+  server.on("/update", HTTP_GET, updateHandler);
 
   events.onConnect([](AsyncEventSourceClient *client) {
     Serial.println("Client connected");
