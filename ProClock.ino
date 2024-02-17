@@ -62,8 +62,7 @@ void setup() {
         DEBUG(F("SSD1306 allocation failed"));
         for(;;);
     }
-    rtc.init();
-    rtc.startClock();
+    rtc.begin();
 
     nvs_flash_init();
 

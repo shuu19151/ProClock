@@ -68,7 +68,7 @@ ClockApp::ClockApp(MultiProDisplay* multiProDisplay, align_t align, bool showSec
 void ClockApp::update(bool first, uint32_t remaining_duration) {
     std::string timeString;
     uint32_t loopStart = millis();
-    Time now = rtc.getTime();
+    Time now = rtc.getDateTime();
     if(first) {
         this->m_lastHour = -1;
         this->m_lastMinute = -1;

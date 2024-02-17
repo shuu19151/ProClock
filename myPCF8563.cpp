@@ -1,6 +1,36 @@
 #include "myPCF8563.h"
 #include "Arduino.h"
 
+#define PCF8563_DATA_SIZE     (7)
+
+#define REG_CONTROL_STATUS_1  (0x00)
+#define REG_CONTROL_STATUS_2  (0x01)
+#define REG_VL_SECONDS        (0x02)
+#define REG_MINUTES           (0x03)
+#define REG_HOURS             (0x04)
+#define REG_DAYS              (0x05)
+#define REG_WEEKDAYS          (0x06)
+#define REG_CENTURY_MONTHS    (0x07)
+#define REG_YEARS             (0x08)
+#define REG_MINUTE_ALARM      (0x09)
+#define REG_HOUR_ALARM        (0x0A)
+#define REG_DAY_ALARM         (0x0B)
+#define REG_WEEKDAY_ALARM     (0x0C)
+#define REG_CLKOUT_CONTROL    (0x0D)
+#define REG_TIMER_CONTROL     (0x0E)
+#define REG_TIMER             (0x0F)
+
+#define CENTURY_FLAG          (7)
+#define VL_FLAG               (7)
+
+#define MASK_VL_SECONDS       (0x80) //0b10000000
+#define MASK_MINUTE           (0x7f) //0b01111111
+#define MASK_HOUR             (0x3f) //0b00111111
+#define MASK_DAY              (0x3f) //0b00111111
+#define MASK_WEEKDAY          (0x07) //0b00000111
+#define MASK_MONTH            (0x1f) //0b00011111
+#define MASK_CENTURY          (0x80) //0b10000000
+
 /**
  * @brief Initialize the PCF8563
  * 
@@ -8,10 +38,12 @@
  * 
  * @return None
 */
-void PCF8563::init() {
-  Wire.begin(); //initialize the I2C interface
-  write_AND(Control_status_1,~(1<<3)); //clear TESTC bit
-  write_AND(CLKOUT_control,~(1<<7)); //clear CLKOUT enable bit
+void PCF8563::begin(TwoWire &port) {
+  this->m_i2c = &port;
+  this->m_i2c->begin();
+  this->m_write_AND(REG_CONTROL_STATUS_1, ~(1<<3)); //clear TESTC bit
+  this->m_write_AND(REG_CLKOUT_CONTROL, ~(1<<7)); //clear CLKOUT enable bit
+  this->m_startClock(); //start the clock
 }
 
 /**
@@ -21,8 +53,8 @@ void PCF8563::init() {
  * 
  * @return None
 */
-void PCF8563::startClock() {
-  write_AND(Control_status_1, ~(1<<5));
+void PCF8563::m_startClock() {
+  m_write_AND(REG_CONTROL_STATUS_1, ~(1<<5));
 }
 
 /**
@@ -32,123 +64,86 @@ void PCF8563::startClock() {
  * 
  * @return None
 */
-void PCF8563::stopClock() {
-  write_OR(Control_status_1, 1<<5);
+void PCF8563::m_stopClock() {
+  m_write_OR(REG_CONTROL_STATUS_1, 1<<5);
 }
 
 /**
- * @brief Set the year
+ * @brief Set the RTC date/time register with Time structure
  * 
- * @param [in] year: Selected year (you can set values 0-99)
+ * @param [in] dt: Time structure
  * 
  * @return None
 */
-void PCF8563::setYear(uint8_t year) {
-  const uint8_t data = ((get_second_number(year))<<4) | (get_first_number(year));
-  write(Years, data);
+void PCF8563::setDateTime(const Time* dt) {
+  uint8_t data[7] = {0};
+  data[0] = m_dec2bcd(dt->second) & ~MASK_VL_SECONDS;
+  data[1] = m_dec2bcd(dt->minute);
+  data[2] = m_dec2bcd(dt->hour);
+  data[3] = m_dec2bcd(dt->day);
+  data[4] = m_dec2bcd(dt->weekday);
+  data[5] = m_dec2bcd(dt->month);
+  data[6] = m_dec2bcd(dt->year % 100);
+  (2000 % dt->year == 2000) ? data[5] &= ~MASK_CENTURY : data[5] |= MASK_CENTURY; // if year >= 2000, set century bit to 0 otherwise set to 1
+  this->m_stopClock();
+  this->m_write(REG_VL_SECONDS, data, 7);
+  this->m_startClock();
 }
 
 /**
- * @brief Set the month
+ * @brief Set the RTC date/time register with Time structure
  * 
- * @param [in] month: Selected month (you can set values 1-12)
- * 
- * @return None
-*/
-void PCF8563::setMonth(uint8_t month) {
-  const uint8_t data = ((get_second_number(month))<<4) | (get_first_number(month));
-  write(Century_months,data);
-}
-
-/**
- * @brief Set the day
- * 
- * @param [in] day: Selected day (you can set values 1-31)
- * 
- * @return None
-*/
-void PCF8563::setDay(uint8_t day) {
-  const uint8_t data = ((get_second_number(day))<<4) | (get_first_number(day));
-  write(Days,data);
-}
-
-/**
- * @brief Set weekday
- * 
- * @param [in] weekday: Selected day (you can set values 0-6)
- * 
- * @return None
-*/
-void PCF8563::setWeekday(uint8_t weekday) {
-  const uint8_t data = weekday;
-  write(Weekdays,weekday);
-}
-
-/**
- * @brief Set the hour
- * 
- * @param [in] hour: Selected day (you can set values 0-23)
- * 
- * @return None
-*/
-void PCF8563::setHour(uint8_t hour) {
-  const uint8_t data = ((get_second_number(hour))<<4) | (get_first_number(hour));
-  write(Hours,data);
-}
-
-/**
- * @brief Set the minute
- * 
- * @param [in] minute: Selected day (you can set values 0-59)
- * 
- * @return None
-*/
-void PCF8563::setMinute(uint8_t minut) {
-  const uint8_t data = ((get_second_number(minut))<<4) | (get_first_number(minut));
-  write(Minutes, data);
-}
-
-/**
- * @brief Set the second
- * 
- * @param [in] second: Selected day (you can set values 0-59)
- * 
- * @return None
-*/
-void PCF8563::setSecond(uint8_t second) {
-  const uint8_t data = ((get_second_number(second))<<4) | (get_first_number(second));
-  write(VL_seconds,data);
-}
-
-/**
- * @brief Get the time
- * 
- * @param None
+ * @param [in] dt: Time structure
  * 
  * @return Time structure
 */
-Time PCF8563::getTime() {
-  Time output;
+Time PCF8563::getDateTime(void) {
+  Time datetime = {0};
+  uint8_t rawData[7] = {0};
+  this->m_read(REG_VL_SECONDS, rawData, PCF8563_DATA_SIZE);
+  /*- 0..59 -*/
+  datetime.second = this->m_bcd2dec(rawData[0] & ~MASK_VL_SECONDS);
+  /*- 0..59 -*/
+  datetime.minute = this->m_bcd2dec(rawData[1] & MASK_MINUTE);
+  /*- 0..23 -*/
+  datetime.hour = this->m_bcd2dec(rawData[2] & MASK_HOUR);
+  /*- 1..31 -*/
+  datetime.day = this->m_bcd2dec(rawData[3] & MASK_DAY);
+  /*- 0..6 -*/
+  datetime.weekday = this->m_bcd2dec(rawData[4] & MASK_WEEKDAY);
+  /*- 1..12 -*/
+  datetime.month = this->m_bcd2dec(rawData[5] & MASK_MONTH);
+  /*- 0..99 -*/
+  /* year value is 00 to 99, xx
+  * with the highest bit of month = century
+  * 0 = 20xx, 1 = 19xx
+  */
+  datetime.year = this->m_bcd2dec(rawData[6]) + (rawData[5] & MASK_CENTURY ? 1900 : 2000);
 
-  //read data registers contents
-  const uint8_t YEAR    = read(Years);
-  const uint8_t MONTH   = read(Century_months);
-  const uint8_t DAY     = read(Days);
-  const uint8_t WEEKDAY = read(Weekdays);
-  const uint8_t HOUR    = read(Hours);
-  const uint8_t MINUTE  = read(Minutes);
-  const uint8_t SECONDS = read(VL_seconds);
+  this->m_i2c->endTransmission();
+  return datetime;
+}
 
-  //convert readed data to numbers using bcd_to_number function).
-  output.year    = bcd_to_number((YEAR&0b11110000)>>4,YEAR&0b00001111);
-  output.month   = bcd_to_number((MONTH&0b00010000)>>4,MONTH&0b00001111);
-  output.day     = bcd_to_number((DAY&0b00110000)>>4,DAY&0b00001111);
-  output.weekday = bcd_to_number(0,WEEKDAY&0b00000111);
-  output.hour    = bcd_to_number((HOUR&0b00110000)>>4,HOUR&0b00001111);
-  output.minute  = bcd_to_number((MINUTE&0b01110000)>>4,MINUTE&0b00001111);
-  output.second  = bcd_to_number((SECONDS&0b01110000)>>4,SECONDS&0b00001111);
+/**
+ * @brief Convert from decimal to BCD number
+ * 
+ * @param [in] dec: 8-bit decimal
+ * 
+ * @return 8-bit BCD value
+*/
+const uint8_t PCF8563::m_dec2bcd(uint8_t dec) {
+  return ((dec / 10) << 4) | (dec % 10);
+}
 
-  return output;
+/**
+ * @brief Convert from BCD number to decimal value
+ * 
+ * @param [in] bcd: 8-bit BCD number
+ * 
+ * @return 8-bit decimal value
+*/
+uint8_t PCF8563::m_bcd2dec(uint8_t bcd) {
+  return ((bcd >> 4) * 10) + (bcd & 0x0f);
 }
 
 /**
@@ -159,15 +154,14 @@ Time PCF8563::getTime() {
  * @return 1 if clock integrity is guaranteed, 0 if not
 */
 bool PCF8563::checkClockIntegrity() {
-    const uint8_t data = read(VL_seconds); //read the data
+    uint8_t data;
+    this->m_read(REG_VL_SECONDS, &data, 1); //read the data
 
-    if(data & (1<<7))
-    {
+    if(data & (1<<7)) {
       return 0; //if clock integrity is not guaranteed return 0
     }
 
-    else
-    {
+    else {
       return 1; //otherwise return 1
     }
 }
@@ -179,9 +173,8 @@ bool PCF8563::checkClockIntegrity() {
  * 
  * @return None
 */
-void PCF8563::enableClkOutput()
-{
-  write_OR(CLKOUT_control,1<<7); //set FE bit in CLKOUT_control register
+void PCF8563::enableClkOutput() {
+  this->m_write_OR(REG_CLKOUT_CONTROL, 1<<7); //set FE bit in REG_CLKOUT_CONTROL register
 }
 
 /**
@@ -191,9 +184,8 @@ void PCF8563::enableClkOutput()
  * 
  * @return None
 */
-void PCF8563::disableClkOutput()
-{
-  write_AND(CLKOUT_control,~(1<<7)); //clear FE bit in CLKOUT_control register
+void PCF8563::disableClkOutput() {
+  this->m_write_AND(REG_CLKOUT_CONTROL, ~(1<<7)); //clear FE bit in REG_CLKOUT_CONTROL register
 }
 
 /**
@@ -203,26 +195,24 @@ void PCF8563::disableClkOutput()
  * 
  * @return None
 */
-void PCF8563::setClkOutputFrequency(output_frequency frequency)
-{
-  switch(frequency)
-  {
+void PCF8563::setClkOutputFrequency(output_frequency frequency) {
+  switch(frequency) {
     case CLKOUT_32768_Hz:
-      write_AND(CLKOUT_control,~((1<<0) | (1<<1)));
+      this->m_write_AND(REG_CLKOUT_CONTROL,~((1<<0) | (1<<1)));
       break;
 
     case CLKOUT_1024_Hz:
-      write_AND(CLKOUT_control,~(1<<1));
-      write_OR(CLKOUT_control,1<<0);
+      this->m_write_AND(REG_CLKOUT_CONTROL,~(1<<1));
+      this->m_write_OR(REG_CLKOUT_CONTROL,1<<0);
       break;
 
     case CLKOUT_32_Hz:
-      write_AND(CLKOUT_control,~(1<<0));
-      write_OR(CLKOUT_control,1<<1);
+      this->m_write_AND(REG_CLKOUT_CONTROL,~(1<<0));
+      this->m_write_OR(REG_CLKOUT_CONTROL,1<<1);
       break;
 
     case CLKOUT_1_Hz:
-      write_OR(CLKOUT_control,(1<<0) | (1<<1));
+      this->m_write_OR(REG_CLKOUT_CONTROL,(1<<0) | (1<<1));
       break;
   }
 }
@@ -230,75 +220,36 @@ void PCF8563::setClkOutputFrequency(output_frequency frequency)
 /**
  * @brief Read one byte from selected register
  * 
- * @param [in] address: Register address
- * 
- * @return One byte of data
-*/
-uint8_t PCF8563::read(uint8_t address)
-{
-  Wire.beginTransmission(PCF8563_address); //begin transmission
-  Wire.write(address); //inform chip what register we want to read
-  Wire.endTransmission();
-  Wire.requestFrom(PCF8563_address,1); //request one byte from the chip
-  uint8_t data = Wire.read(); //read the data
-  return data;
-}
-
-/**
- * @brief Convert two digits to one number
- * 
- * @param [in] first: First digit
- * @param [in] second: Second digit
- * 
- * @return One number
-*/
-unsigned char PCF8563::bcd_to_number(uint8_t first, uint8_t second) {
-  unsigned char output;
-  output = first*10;
-  output = output + second;
-  return output;
-}
-
-/**
- * @brief Get ten’s place digit of the number
- * 
- * @param [in] number: Selected number
- * 
- * @return Digit
-*/
-uint8_t PCF8563::get_first_number(unsigned short number)
-{
-  uint8_t output = number%10;
-  return output;
-}
-
-/**
- * @brief Get unit place digit of the number
- * 
- * @param [in] number: Selected number
- * 
- * @return Digit
-*/
-uint8_t  PCF8563::get_second_number(unsigned short number)
-{
-  uint8_t output = number/10;
-  return output;
-}
-
-/**
- * @brief Write one byte of data to the register
- * 
- * @param [in] address: Register address
- * @param [in] data: One byte of data
+ * @param [in] addr: Register address
  * 
  * @return None
 */
-void PCF8563::write(uint8_t address, uint8_t data)
-{
-  Wire.beginTransmission(PCF8563_address);
-  Wire.write(address);
-  Wire.write(data);
-  Wire.endTransmission();
+void PCF8563::m_read(uint8_t addr, uint8_t* data, uint8_t size) {
+  this->m_i2c->beginTransmission(PCF8563_ADDR);
+  this->m_i2c->write(addr);
+  this->m_i2c->endTransmission();
+  this->m_i2c->requestFrom((int)PCF8563_ADDR, (int)size); //request one byte from the chip
+  for(uint8_t i = 0; i < size; i++) {
+    *(data++) = this->m_i2c->read();
+  }
+}
+
+/**
+ * @brief Write data to the register
+ * 
+ * @param [in] addr: Register address
+ * @param [in] data: Data to send
+ * @param [in] size: Size of data
+ * 
+ * @return None
+*/
+void PCF8563::m_write(uint8_t addr, uint8_t *data, uint8_t size) {
+  this->m_i2c->beginTransmission(PCF8563_ADDR);
+  this->m_i2c->write(addr);
+  for(uint8_t i = 0; i < size; i++) {
+    this->m_i2c->write(data[i]);
+  }
+  this->m_i2c->endTransmission();
 }
 
 /**
@@ -309,11 +260,11 @@ void PCF8563::write(uint8_t address, uint8_t data)
  * 
  * @return None
 */
-void PCF8563::write_OR(uint8_t address, uint8_t data)
-{
-  uint8_t c = read(address);
+void PCF8563::m_write_OR(uint8_t address, uint8_t data) {
+  uint8_t c;
+  this->m_read(address, &c, 1);
   c = c | data;
-  write(address,c);
+  this->m_write(address, &c, 1);
 }
 
 /**
@@ -324,9 +275,9 @@ void PCF8563::write_OR(uint8_t address, uint8_t data)
  * 
  * @return None
 */
-void PCF8563::write_AND(uint8_t address, uint8_t data)
-{
-  uint8_t c = read(address);
+void PCF8563::m_write_AND(uint8_t address, uint8_t data) {
+  uint8_t c;
+  this->m_read(address, &c, 1);
   c = c & data;
-  write(address,c);
+  this->m_write(address, &c, 1);
 }

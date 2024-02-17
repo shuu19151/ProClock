@@ -27,7 +27,7 @@ void notFound(AsyncWebServerRequest *request) {
 }
 
 void firstLoadHandler(AsyncWebServerRequest *request) {
-    dvDateTime.dateTime = rtc.getTime();
+    dvDateTime.dateTime = rtc.getDateTime();
     // JSONFirstLoad["hour"] = String(dvDateTime.dateTime.hour);
     // JSONFirstLoad["min"] = String(dvDateTime.dateTime.minute);
     // JSONFirstLoad["sec"] = String(dvDateTime.dateTime.second);
@@ -181,15 +181,7 @@ void setupAccessPoint(void) {
 void webserverProcess(void) {
   if(IS_BIT_SET(webserver_flags, WS_SET_DATETIME_FLAG)) {
     memcpy(&dvDateTime.dateTime, &dvDateTime.setDateTime, sizeof(dvDateTime.setDateTime));
-    rtc.stopClock();
-    rtc.setYear(dvDateTime.setDateTime.year);
-    rtc.setMonth(dvDateTime.setDateTime.month);
-    rtc.setDay(dvDateTime.setDateTime.day);
-    rtc.setWeekday(dvDateTime.setDateTime.weekday);
-    rtc.setHour(dvDateTime.setDateTime.hour);
-    rtc.setMinute(dvDateTime.setDateTime.minute);
-    rtc.setSecond(dvDateTime.setDateTime.second);
-    rtc.startClock();
+    rtc.setDateTime(&dvDateTime.dateTime);
     CLR_BIT(webserver_flags, WS_SET_DATETIME_FLAG);
   }
   if(IS_BIT_SET(webserver_flags, WS_NEW_WIFI_FLAG)) {
